@@ -28,12 +28,33 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-task webpack(type: Exec) {
+// OS Detection from https://stackoverflow.com/a/31443955
+import org.apache.tools.ant.taskdefs.condition.Os
+task detectOs {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        project.ext.set('OS', 'Windows')
+        project.ext.set('cmdExt', '.cmd')
+    } else if (Os.isFamily(Os.FAMILY_MAC)) {
+        project.ext.set('OS', 'Mac')
+        project.ext.set('cmdExt', '')
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        // NB: Mac also matches Unix, so test for Mac first
+        project.ext.set('OS', 'Unix')
+        project.ext.set('cmdExt', '')
+    }
+    println "OS Detected: ${project.ext.OS}"
+}
+
+task getNPMDeps(type: Exec) {
+    commandLine "npm", "install" // working directory is the project directory
+}
+
+task webpack(dependsOn: [ 'detectOs', 'getNPMDeps'], type: Exec) {
 	inputs.file("package-lock.json").withPathSensitivity(PathSensitivity.RELATIVE)
 	inputs.dir("src").withPathSensitivity(PathSensitivity.RELATIVE)
 	outputs.dir("$buildDir/resources/main/static/js")
 	outputs.cacheIf { true }
-	commandLine "$projectDir/node_modules/.bin/webpack.cmd"
+	commandLine "$projectDir/node_modules/.bin/webpack${project.ext.cmdExt}"
 }
 
 dependencyManagement {
