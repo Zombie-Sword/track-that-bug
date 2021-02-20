@@ -7,7 +7,7 @@ class Main extends React.Component {
 
     render(){
         return (
-            <div>You did it</div>
+            <div>You did it! Now, <a href="/login">log in</a>.</div>
         )
     }
 }
