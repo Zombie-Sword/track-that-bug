@@ -45,7 +45,11 @@ task detectOs {
     println "OS Detected: ${project.ext.OS}"
 }
 
-task webpack(dependsOn: detectOs, type: Exec) {
+task getNPMDeps(type: Exec) {
+    commandLine "npm", "install" // working directory is the project directory
+}
+
+task webpack(dependsOn: [ 'detectOs', 'getNPMDeps'], type: Exec) {
 	inputs.file("package-lock.json").withPathSensitivity(PathSensitivity.RELATIVE)
 	inputs.dir("src").withPathSensitivity(PathSensitivity.RELATIVE)
 	outputs.dir("$buildDir/resources/main/static/js")
