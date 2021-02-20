@@ -5,14 +5,23 @@ A bug tracker application
 
 You'll need to install npm and OpenJDK 11 before building the project.
 
+Currently, we support Windows and Linux development; YMMV on other
+platforms.
+
 # Development
 
-To get started, first build the project
+To get started, first build the project.
 
-    ./gradlew build
+    ./gradlew build     # Linux
+<i></i>
+
+    gradlew.cmd build   % Windows
 
 Then, run it.
 
-    ./gradlew bootRun
+    ./gradlew bootRun   # Linux
+<i></i>
+
+    gradlew.cmd bootRun   % Windows
 
 The webapp will start up on http://localhost:8080/
